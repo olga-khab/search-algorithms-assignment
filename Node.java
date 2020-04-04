@@ -129,8 +129,39 @@ public class Node{
     return this.changed_parent_digit;
   }
 
+  public boolean compareTo(Node n){
+    if (this.getValue().equals(n.getValue())){
+
+      ArrayList<ArrayList<Integer>> n_children = new ArrayList<ArrayList<Integer>>();
+      n.createChildren();
+      this.createChildren();
+      for (Node child:n.getChirdren()){
+        n_children.add(child.getValue());
+      }
+      for (Node child:this.getChirdren()){
+        if (!n_children.contains(child.getValue())){
+          //at least one child is different
+          return false;
+        }
+      }
+      return true;
+    }
+    // values don't match
+    return false;
+  }
+
+  public boolean isInList(ArrayList<Node> list){
+    for (Node item : list){
+      if (item.compareTo(this)){
+        return true;
+      }
+    }
+    // all the same
+    return false;
+  }
+
   public static void main(String[] args){
-    ArrayList<Integer> vals = new ArrayList<Integer>();
+  /*  ArrayList<Integer> vals = new ArrayList<Integer>();
     vals.add(0,7);
     vals.add(1,5);
     vals.add(2,3);
@@ -143,6 +174,6 @@ public class Node{
       }
       System.out.print(test.getChirdren().get(i).getParentDigit());
       System.out.println();
-    }
+    } */
   }
 }

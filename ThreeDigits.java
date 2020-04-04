@@ -25,65 +25,83 @@ public class ThreeDigits {
   //  fringe.add(current_node)
     //BFS
     while (!current_node.getValue().equals(goal_node.getValue())){
-      expanded.add(current_node);
-      if (current_node.getParent()!=null && !path.contains(current_node.getParent())){
-        path.add(current_node.getParent());
-      }
+      // check forbidden & cycles
+      if (!(forbidden!=null && forbidden.contains(current_node.getValue()))
+        && !(expanded.size()!=0 && current_node.getParent()!=null && current_node.isInList(expanded))){
+        expanded.add(current_node);
+        if (expanded.size()==1000){
+            System.out.println("No solution found");
+            printValues(expanded);
+            return;
+        }
 
-      if (expanded.size()==1000){
+        // check forbidden
+
+        // generate children
+        current_node.createChildren();
+        for (Node child : current_node.getChirdren()){
+          fringe.add(child);
+        }
+
+        /*if (fringe.size() == 0){ // reached the end but didn't find the node
           System.out.println("No solution found");
           printValues(expanded);
           return;
+        }*/
       }
-
-      // check forbidden
-
-      // generate children
-      current_node.createChildren();
-      for (Node child : current_node.getChirdren()){
-        fringe.add(child);
-      }
-
-      /*if (fringe.size() == 0){ // reached the end but didn't find the node
-        System.out.println("No solution found");
-        printValues(expanded);
-        return;
-      }*/
       current_node= fringe.get(0);
       fringe.remove(0);
     }
 
     // found the goal node
     expanded.add(current_node);
+
     path.add(current_node);
-    printValues(path);
+    while (current_node.getParent()!=null){
+      path.add(current_node.getParent());
+      current_node = current_node.getParent();
+
+    }
+    ArrayList<Node> path_reversed = new ArrayList<Node>();
+    for (int i = path.size()-1; i>=0; i--){
+      path_reversed.add(path.get(i));
+    }
+    printValues(path_reversed);
     printValues(expanded);
     return;
   }
-
 
   public static void main(String[] args){
     // testing printValues
     //ArrayList<Node> expanded = new ArrayList<Node>();
     ArrayList<Integer> val = new ArrayList<Integer>();
     ArrayList<Integer> val2 = new ArrayList<Integer>();
-    val.add(1);
-    val.add(8);
+    ArrayList<Integer> val3 = new ArrayList<Integer>();
+    ArrayList<Integer> val4 = new ArrayList<Integer>();
+    ArrayList<ArrayList<Integer>> forbidden = new ArrayList<ArrayList<Integer>>();
+    val.add(3);
+    val.add(2);
     val.add(0);
+    val2.add(1);
+    val2.add(1);
     val2.add(0);
-    val2.add(9);
-    val2.add(0);
-
+    val3.add(3);
+    val3.add(3);
+    val3.add(0);
+    val4.add(3);
+    val4.add(1);
+    val4.add(1);
     //expanded.add(new Node(val,null, null, -1));
 
     //expanded.add(new Node(val2,null, null, -1));
     //printValues(expanded);
 
-    Node start = new Node(val,null, null, -1);
-    Node goal = new Node(val2,null, null, -1);
-
+    Node start = new Node(val,null, null, 0);
+    Node goal = new Node(val2,null, null, 0);
+  //  Node f1 = new Node(val3,null, null, 0);
+    //forbidden.add(val3);
+    forbidden.add(val4);
     BFS(start, goal,null);
-
 
   }
 }
