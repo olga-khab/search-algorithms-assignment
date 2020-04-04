@@ -29,11 +29,11 @@ public class Node{
       temp.add(1,second);
       temp.add(2,third);
       // create child Node
-      Node n = new Node(temp, null, this, 1);
-      this.children.add(0,n);
+      Node n = new Node(temp, null, this, -1);
+      this.children.add(n);
     }else{
-      Node n = new Node(null, null, this, 1);
-      this.children.add(0,n);
+      //Node n = new Node(null, null, this, 1);
+      //#this.children.add(0,n);
     }
     // + 1
     if (first_digit != 9){
@@ -47,10 +47,10 @@ public class Node{
       temp.add(2,third);
       // create child Node
       Node n = new Node(temp, null, this, 1);
-      this.children.add(1,n);
+      this.children.add(n);
     }else{
-      Node n = new Node(null, null, this, 1);
-      this.children.add(1,n);
+    //  Node n = new Node(null, null, this, 1);
+    //  this.children.add(1,n);
     }
     //**** generate second two ****//
     int second_digit = current_value.get(1);
@@ -65,11 +65,11 @@ public class Node{
       temp.add(1,second);
       temp.add(2,third);
       // create child Node
-      Node n = new Node(temp, null, this, 2);
-      this.children.add(2,n);
+      Node n = new Node(temp, null, this, -2);
+      this.children.add(n);
     }else{
-      Node n = new Node(null, null, this, 2);
-      this.children.add(2,n);
+      //Node n = new Node(null, null, this, 2);
+      //this.children.add(2,n);
     }
     // + 1
     if (second_digit != 9){
@@ -83,10 +83,10 @@ public class Node{
       temp.add(2,third);
       // create child Node
       Node n = new Node(temp, null, this, 2);
-      this.children.add(3,n);
+      this.children.add(n);
     }else{
-      Node n = new Node(null, null, this, 2);
-      this.children.add(3,n);
+    //  Node n = new Node(null, null, this, 2);
+      //this.children.add(3,n);
     }
     //**** generate third two ****//
     int third_digit = current_value.get(2);
@@ -101,11 +101,11 @@ public class Node{
       temp.add(1,second);
       temp.add(2,third);
       // create child Node
-      Node n = new Node(temp, null, this, 3);
-      this.children.add(4,n);
+      Node n = new Node(temp, null, this, -3);
+      this.children.add(n);
     }else{
-      Node n = new Node(null, null, this, 3);
-      this.children.add(4,n);
+  //    Node n = new Node(null, null, this, 3);
+    //  this.children.add(4,n);
     }
     // + 1
     if (third_digit != 9){
@@ -119,10 +119,10 @@ public class Node{
       temp.add(2,third);
       // create child Node
       Node n = new Node(temp, null, this, 3);
-      this.children.add(5,n);
+      this.children.add(n);
     }else{
-      Node n = new Node(null, null, this, 3);
-      this.children.add(5,n);
+    //  Node n = new Node(null, null, this, 3);
+    //  this.children.add(5,n);
     }
   }
 
@@ -147,11 +147,12 @@ public class Node{
     vals.add(2,1);
     Node test = new Node(vals, null, null, -1);
     test.createChildren();
-    for (int i=0; i<6; i++){
-      for (int j=0; j<3; j++){
+    for (int i=0; i<test.getChirdren().size(); i++){
+      for (int j=0; j< 3; j++){
         System.out.print(test.getChirdren().get(i).getValue().get(j));
         System.out.print(",");
       }
+      System.out.print(test.getChirdren().get(i).getParentDigit());
       System.out.println();
     }
   }
