@@ -1,16 +1,16 @@
 import java.util.*;
-
+import java.lang.Math.*;
 public class Node{
   private ArrayList<Integer> value;
   private ArrayList<Node> children;
   private Node parent;
-  private int parent_digit;
+  private int changed_parent_digit;
 
   public Node(ArrayList<Integer> vals, ArrayList<Node> children, Node parent, int digit){
     this.value = vals;
     this.children=children;
     this.parent=parent;
-    this.parent_digit=digit;
+    this.changed_parent_digit=digit;
   }
 
   public void createChildren(){
@@ -19,110 +19,99 @@ public class Node{
     //**** generate first two ****//
     int first_digit = current_value.get(0);
     // - 1
-    if (first_digit != 0){
-      int first = first_digit-1;
-      int second = current_value.get(1);
-      int third = current_value.get(2);
-      // create "value" of the child node
-      ArrayList<Integer> temp = new ArrayList<Integer>();
-      temp.add(0,first);
-      temp.add(1,second);
-      temp.add(2,third);
-      // create child Node
-      Node n = new Node(temp, null, this, -1);
-      this.children.add(n);
-    }else{
-      //Node n = new Node(null, null, this, 1);
-      //#this.children.add(0,n);
-    }
+    //don't change same digit twice
+    if (Math.abs(this.changed_parent_digit)!=1){
+      if (first_digit != 0){
+        int first = first_digit-1;
+        int second = current_value.get(1);
+        int third = current_value.get(2);
+        // create "value" of the child node
+        ArrayList<Integer> temp = new ArrayList<Integer>();
+        temp.add(0,first);
+        temp.add(1,second);
+        temp.add(2,third);
+        // create child Node
+        Node n = new Node(temp, null, this, -1);
+        this.children.add(n);
+      }
     // + 1
-    if (first_digit != 9){
-      int first = first_digit+1;
-      int second = current_value.get(1);
-      int third = current_value.get(2);
-      // create "value" of the child node
-      ArrayList<Integer> temp = new ArrayList<Integer>();
-      temp.add(0,first);
-      temp.add(1,second);
-      temp.add(2,third);
-      // create child Node
-      Node n = new Node(temp, null, this, 1);
-      this.children.add(n);
-    }else{
-    //  Node n = new Node(null, null, this, 1);
-    //  this.children.add(1,n);
+      if (first_digit != 9){
+        int first = first_digit+1;
+        int second = current_value.get(1);
+        int third = current_value.get(2);
+        // create "value" of the child node
+        ArrayList<Integer> temp = new ArrayList<Integer>();
+        temp.add(0,first);
+        temp.add(1,second);
+        temp.add(2,third);
+        // create child Node
+        Node n = new Node(temp, null, this, 1);
+        this.children.add(n);
+      }
     }
     //**** generate second two ****//
     int second_digit = current_value.get(1);
     // - 1
-    if (second_digit != 0){
-      int first = current_value.get(0);
-      int second = second_digit-1;
-      int third = current_value.get(2);
-      // create "value" of the child node
-      ArrayList<Integer> temp = new ArrayList<Integer>();
-      temp.add(0,first);
-      temp.add(1,second);
-      temp.add(2,third);
-      // create child Node
-      Node n = new Node(temp, null, this, -2);
-      this.children.add(n);
-    }else{
-      //Node n = new Node(null, null, this, 2);
-      //this.children.add(2,n);
-    }
-    // + 1
-    if (second_digit != 9){
-      int first = current_value.get(0);
-      int second = second_digit+1;
-      int third = current_value.get(2);
-      // create "value" of the child node
-      ArrayList<Integer> temp = new ArrayList<Integer>();
-      temp.add(0,first);
-      temp.add(1,second);
-      temp.add(2,third);
-      // create child Node
-      Node n = new Node(temp, null, this, 2);
-      this.children.add(n);
-    }else{
-    //  Node n = new Node(null, null, this, 2);
-      //this.children.add(3,n);
+    if (Math.abs(this.changed_parent_digit)!=2){
+      if (second_digit != 0){
+        int first = current_value.get(0);
+        int second = second_digit-1;
+        int third = current_value.get(2);
+        // create "value" of the child node
+        ArrayList<Integer> temp = new ArrayList<Integer>();
+        temp.add(0,first);
+        temp.add(1,second);
+        temp.add(2,third);
+        // create child Node
+        Node n = new Node(temp, null, this, -2);
+        this.children.add(n);
+      }
+      // + 1
+      if (second_digit != 9){
+        int first = current_value.get(0);
+        int second = second_digit+1;
+        int third = current_value.get(2);
+        // create "value" of the child node
+        ArrayList<Integer> temp = new ArrayList<Integer>();
+        temp.add(0,first);
+        temp.add(1,second);
+        temp.add(2,third);
+        // create child Node
+        Node n = new Node(temp, null, this, 2);
+        this.children.add(n);
+      }
     }
     //**** generate third two ****//
     int third_digit = current_value.get(2);
     // - 1
-    if (third_digit != 0){
-      int first = current_value.get(0);
-      int second = current_value.get(1);
-      int third = third_digit-1;
-      // create "value" of the child node
-      ArrayList<Integer> temp = new ArrayList<Integer>();
-      temp.add(0,first);
-      temp.add(1,second);
-      temp.add(2,third);
-      // create child Node
-      Node n = new Node(temp, null, this, -3);
-      this.children.add(n);
-    }else{
-  //    Node n = new Node(null, null, this, 3);
-    //  this.children.add(4,n);
-    }
-    // + 1
-    if (third_digit != 9){
-      int first = current_value.get(0);
-      int second = current_value.get(1);
-      int third = third_digit+1;
-      // create "value" of the child node
-      ArrayList<Integer> temp = new ArrayList<Integer>();
-      temp.add(0,first);
-      temp.add(1,second);
-      temp.add(2,third);
-      // create child Node
-      Node n = new Node(temp, null, this, 3);
-      this.children.add(n);
-    }else{
-    //  Node n = new Node(null, null, this, 3);
-    //  this.children.add(5,n);
+    if (Math.abs(this.changed_parent_digit)!=3){
+      if (third_digit != 0){
+        int first = current_value.get(0);
+        int second = current_value.get(1);
+        int third = third_digit-1;
+        // create "value" of the child node
+        ArrayList<Integer> temp = new ArrayList<Integer>();
+        temp.add(0,first);
+        temp.add(1,second);
+        temp.add(2,third);
+        // create child Node
+        Node n = new Node(temp, null, this, -3);
+        this.children.add(n);
+      }
+      // + 1
+      if (third_digit != 9){
+        int first = current_value.get(0);
+        int second = current_value.get(1);
+        int third = third_digit+1;
+        // create "value" of the child node
+        ArrayList<Integer> temp = new ArrayList<Integer>();
+        temp.add(0,first);
+        temp.add(1,second);
+        temp.add(2,third);
+        // create child Node
+        Node n = new Node(temp, null, this, 3);
+        this.children.add(n);
+      }
     }
   }
 
@@ -137,15 +126,15 @@ public class Node{
     return(this.parent);
   }
   public int getParentDigit(){
-    return this.parent_digit;
+    return this.changed_parent_digit;
   }
 
   public static void main(String[] args){
     ArrayList<Integer> vals = new ArrayList<Integer>();
-    vals.add(0,3);
-    vals.add(1,9);
-    vals.add(2,1);
-    Node test = new Node(vals, null, null, -1);
+    vals.add(0,7);
+    vals.add(1,5);
+    vals.add(2,3);
+    Node test = new Node(vals, null, null, 0);
     test.createChildren();
     for (int i=0; i<test.getChirdren().size(); i++){
       for (int j=0; j< 3; j++){
