@@ -131,8 +131,12 @@ public class Node{
 
   public boolean compareTo(Node n){
     if (this.getValue().equals(n.getValue())){
-
-      ArrayList<ArrayList<Integer>> n_children = new ArrayList<ArrayList<Integer>>();
+      if (Math.abs(this.getParentDigit())==Math.abs(n.getParentDigit())){
+        return true;
+      }
+    }
+    return false;
+    /*  ArrayList<ArrayList<Integer>> n_children = new ArrayList<ArrayList<Integer>>();
       n.createChildren();
       this.createChildren();
       for (Node child:n.getChirdren()){
@@ -147,7 +151,7 @@ public class Node{
       return true;
     }
     // values don't match
-    return false;
+    return false; */
   }
 
   public boolean isInList(ArrayList<Node> list){
