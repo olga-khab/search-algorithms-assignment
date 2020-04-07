@@ -6,13 +6,16 @@ public class Node{
   private Node parent;
   private int changed_parent_digit;
   private int depth;
+  private double heuristic;
 
-  public Node(ArrayList<Integer> vals, ArrayList<Node> children, Node parent, int digit, int depth){
+  public Node(ArrayList<Integer> vals, ArrayList<Node> children, Node parent,
+  int digit, int depth, double heuristic){
     this.value = vals;
     this.children=children;
     this.parent=parent;
     this.changed_parent_digit=digit;
     this.depth = depth;
+    this.heuristic = heuristic;
   }
 
   public void createChildren(){
@@ -33,7 +36,8 @@ public class Node{
         temp.add(1,second);
         temp.add(2,third);
         // create child Node
-        Node n = new Node(temp, null, this, -1, this.getDepth()+1);
+        Node n = new Node(temp, null, this, -1, this.getDepth()+1,0);
+        n.calculateHeuristic(this);
         this.children.add(n);
       }
     // + 1
@@ -47,7 +51,8 @@ public class Node{
         temp.add(1,second);
         temp.add(2,third);
         // create child Node
-        Node n = new Node(temp, null, this, 1, this.getDepth()+1);
+        Node n = new Node(temp, null, this, 1, this.getDepth()+1,0);
+        n.calculateHeuristic(this);
         this.children.add(n);
       }
     }
@@ -65,7 +70,8 @@ public class Node{
         temp.add(1,second);
         temp.add(2,third);
         // create child Node
-        Node n = new Node(temp, null, this, -2, this.getDepth()+1);
+        Node n = new Node(temp, null, this, -2, this.getDepth()+1,0);
+        n.calculateHeuristic(this);
         this.children.add(n);
       }
       // + 1
@@ -79,7 +85,8 @@ public class Node{
         temp.add(1,second);
         temp.add(2,third);
         // create child Node
-        Node n = new Node(temp, null, this, 2, this.getDepth()+1);
+        Node n = new Node(temp, null, this, 2, this.getDepth()+1,0);
+        n.calculateHeuristic(this);
         this.children.add(n);
       }
     }
@@ -97,7 +104,8 @@ public class Node{
         temp.add(1,second);
         temp.add(2,third);
         // create child Node
-        Node n = new Node(temp, null, this, -3, this.getDepth()+1);
+        Node n = new Node(temp, null, this, -3, this.getDepth()+1,0);
+        n.calculateHeuristic(this);
         this.children.add(n);
       }
       // + 1
@@ -111,7 +119,8 @@ public class Node{
         temp.add(1,second);
         temp.add(2,third);
         // create child Node
-        Node n = new Node(temp, null, this, 3, this.getDepth()+1);
+        Node n = new Node(temp, null, this, 3, this.getDepth()+1,0);
+        n.calculateHeuristic(this);
         this.children.add(n);
       }
     }
@@ -135,6 +144,17 @@ public class Node{
     return this.depth;
   }
 
+  public double getHeuristic(){
+    return this.heuristic;
+  }
+
+  public void calculateHeuristic(Node n){
+    ArrayList<Integer> val1 = this.getValue();
+    ArrayList<Integer> val2 = n.getValue();
+    this.heuristic = Math.abs(val1.get(0)-val2.get(0))+
+    Math.abs(val1.get(1)-val2.get(1))+
+    Math.abs(val1.get(2)-val2.get(2));
+  }
   public boolean compareTo(Node n){
     if (this.getValue().equals(n.getValue())){
       if (Math.abs(this.getParentDigit())==Math.abs(n.getParentDigit())){

@@ -155,7 +155,7 @@ public class ThreeDigits {
       if (fringe.size() == 0 && current_node.getDepth() < limit_depth){
         // no more children - e.g. all forbidden
       //  printValues(expanded);
-        return null;
+        return expanded;
       }else if (fringe.size()==0 && current_node.getDepth() == limit_depth){
         //printValues(expanded);
       //  System.out.println();
@@ -176,6 +176,7 @@ ArrayList<ArrayList<Integer>> forbidden){
   ArrayList<Node> expanded = new ArrayList<Node>();
   ArrayList<Node> path = new ArrayList<Node>();
   int depth = 1;
+  expanded.add(start_node);
   while (true){
 
       ArrayList<Node> current_expanded =
