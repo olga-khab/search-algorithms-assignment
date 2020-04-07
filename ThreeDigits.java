@@ -116,6 +116,109 @@ public class ThreeDigits {
     return;
   }
 
+// depth limited search - needed for IDS
+// returns expanded
+  public static ArrayList<Node> DLS(Node start_node, Node goal_node,
+  ArrayList<ArrayList<Integer>> forbidden, int limit_depth, int total_expanded){
+
+    ArrayList<Node> expanded = new ArrayList<Node>();
+  //  ArrayList<Node> path = new ArrayList<Node>();
+    Stack<Node> fringe = new Stack<Node>();
+    Node current_node = start_node;
+  //  int iterations = 0;
+
+    while (current_node.getDepth() <= limit_depth){
+      // expand node if allowed
+    //  System.out.println(current_node.getValue());
+      if (!(forbidden!=null && forbidden.contains(current_node.getValue()))
+        && !(expanded.size()!=0 && current_node.getParent()!=null && current_node.isInList(expanded))){
+          if (total_expanded+expanded.size() >= 1000){
+            // limit reach, exit
+              return expanded;
+          }
+          if (current_node.getValue().equals(goal_node.getValue())){
+            expanded.add(current_node);
+            return expanded;
+          }
+
+          expanded.add(current_node);
+
+      if (current_node.getDepth() < limit_depth){// if reached max depth stop creating children
+          current_node.createChildren();
+          for (int i = current_node.getChirdren().size()-1; i>=0; i--){
+            //expanded.add(current_node);
+            Node child = current_node.getChirdren().get(i);
+            fringe.push(child);
+          }
+        }
+      }
+      if (fringe.size() == 0 && current_node.getDepth() < limit_depth){
+        // no more children - e.g. all forbidden
+      //  printValues(expanded);
+        return null;
+      }else if (fringe.size()==0 && current_node.getDepth() == limit_depth){
+        //printValues(expanded);
+      //  System.out.println();
+        return expanded;
+      }
+      // keep going
+      current_node = fringe.peek();
+      fringe.pop();
+  }
+  // reached max depth
+  //System.out.println("jd");
+  //printValues(expanded);
+  return expanded;
+}
+
+public static void IDS(Node start_node, Node goal_node,
+ArrayList<ArrayList<Integer>> forbidden){
+  ArrayList<Node> expanded = new ArrayList<Node>();
+  ArrayList<Node> path = new ArrayList<Node>();
+  int depth = 1;
+  while (true){
+
+      ArrayList<Node> current_expanded =
+      DLS(start_node, goal_node, forbidden, depth, expanded.size());
+
+      // reached the end but didn't find the node
+      if (current_expanded == null){
+        System.out.println("No solution found");
+        printValues(expanded);
+        return;
+      }
+
+      expanded.addAll(current_expanded);
+
+      if (expanded.get(expanded.size()-1).getValue().equals(goal_node.getValue())){
+        // found the goal node
+        Node current_node = expanded.get(expanded.size()-1);
+        path.add(current_node);
+        while (current_node.getParent()!=null){
+          path.add(current_node.getParent());
+          current_node = current_node.getParent();
+        }
+        ArrayList<Node> path_reversed = new ArrayList<Node>();
+        for (int i = path.size()-1; i>=0; i--){
+          path_reversed.add(path.get(i));
+        }
+        printValues(path_reversed);
+        printValues(expanded);
+        return;
+      }
+
+      // reached the limit
+      if (expanded.size()>=1000){
+          System.out.println("No solution found");
+          printValues(expanded);
+          return;
+      }
+
+      // otherwise keep going
+      depth++;
+  }
+
+}
 
 
 
@@ -138,8 +241,8 @@ public class ThreeDigits {
     end.add(Integer.parseInt(input.get(1).split("")[2]));
 
 
-    Node start_node = new Node(start,null,null,0);
-    Node end_node = new Node(end,null,null,-4);
+    Node start_node = new Node(start,null,null,0, 0);
+    Node end_node = new Node(end,null,null,-4, 0);
 
     ArrayList<ArrayList<Integer>> forbidden = new ArrayList<ArrayList<Integer>>();
     if (input.size()==3){
@@ -159,6 +262,8 @@ public class ThreeDigits {
       BFS(start_node,end_node,forbidden);
     }else if (args[0].compareTo("D")==0){
       DFS(start_node,end_node,forbidden);
+    }else if (args[0].compareTo("I")==0){
+      IDS(start_node,end_node,forbidden);
     }
   }
 }

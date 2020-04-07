@@ -5,12 +5,14 @@ public class Node{
   private ArrayList<Node> children;
   private Node parent;
   private int changed_parent_digit;
+  private int depth;
 
-  public Node(ArrayList<Integer> vals, ArrayList<Node> children, Node parent, int digit){
+  public Node(ArrayList<Integer> vals, ArrayList<Node> children, Node parent, int digit, int depth){
     this.value = vals;
     this.children=children;
     this.parent=parent;
     this.changed_parent_digit=digit;
+    this.depth = depth;
   }
 
   public void createChildren(){
@@ -31,7 +33,7 @@ public class Node{
         temp.add(1,second);
         temp.add(2,third);
         // create child Node
-        Node n = new Node(temp, null, this, -1);
+        Node n = new Node(temp, null, this, -1, this.getDepth()+1);
         this.children.add(n);
       }
     // + 1
@@ -45,7 +47,7 @@ public class Node{
         temp.add(1,second);
         temp.add(2,third);
         // create child Node
-        Node n = new Node(temp, null, this, 1);
+        Node n = new Node(temp, null, this, 1, this.getDepth()+1);
         this.children.add(n);
       }
     }
@@ -63,7 +65,7 @@ public class Node{
         temp.add(1,second);
         temp.add(2,third);
         // create child Node
-        Node n = new Node(temp, null, this, -2);
+        Node n = new Node(temp, null, this, -2, this.getDepth()+1);
         this.children.add(n);
       }
       // + 1
@@ -77,7 +79,7 @@ public class Node{
         temp.add(1,second);
         temp.add(2,third);
         // create child Node
-        Node n = new Node(temp, null, this, 2);
+        Node n = new Node(temp, null, this, 2, this.getDepth()+1);
         this.children.add(n);
       }
     }
@@ -95,7 +97,7 @@ public class Node{
         temp.add(1,second);
         temp.add(2,third);
         // create child Node
-        Node n = new Node(temp, null, this, -3);
+        Node n = new Node(temp, null, this, -3, this.getDepth()+1);
         this.children.add(n);
       }
       // + 1
@@ -109,7 +111,7 @@ public class Node{
         temp.add(1,second);
         temp.add(2,third);
         // create child Node
-        Node n = new Node(temp, null, this, 3);
+        Node n = new Node(temp, null, this, 3, this.getDepth()+1);
         this.children.add(n);
       }
     }
@@ -127,6 +129,10 @@ public class Node{
   }
   public int getParentDigit(){
     return this.changed_parent_digit;
+  }
+
+  public int getDepth(){
+    return this.depth;
   }
 
   public boolean compareTo(Node n){
