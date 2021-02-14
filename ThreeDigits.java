@@ -129,7 +129,6 @@ public class ThreeDigits {
 
     while (current_node.getDepth() <= limit_depth){
       // expand node if allowed
-    //  System.out.println(current_node.getValue());
       if (!(forbidden!=null && forbidden.contains(current_node.getValue()))
         && !(expanded.size()!=0 && current_node.getParent()!=null && current_node.isInList(expanded))){
           if (total_expanded+expanded.size() >= 1000){
@@ -157,17 +156,12 @@ public class ThreeDigits {
       //  printValues(expanded);
         return expanded;
       }else if (fringe.size()==0 && current_node.getDepth() == limit_depth){
-        //printValues(expanded);
-      //  System.out.println();
         return expanded;
       }
       // keep going
       current_node = fringe.peek();
       fringe.pop();
   }
-  // reached max depth
-  //System.out.println("jd");
-  //printValues(expanded);
   return expanded;
 }
 
@@ -207,22 +201,211 @@ ArrayList<ArrayList<Integer>> forbidden){
         printValues(expanded);
         return;
       }
-
       // reached the limit
       if (expanded.size()>=1000){
           System.out.println("No solution found");
           printValues(expanded);
           return;
       }
-
       // otherwise keep going
       depth++;
   }
 
 }
 
+public static void Greedy(Node start_node, Node goal_node,
+ArrayList<ArrayList<Integer>> forbidden){
+  ArrayList<Node> expanded = new ArrayList<Node>();
+  ArrayList<Node> path = new ArrayList<Node>();
+  //PriorityQueue<Node> fringe = new PriorityQueue<Node>();
+  ArrayList<Node> fringe = new ArrayList<Node>();
+  Node current_node = start_node;
+
+  while (!current_node.getValue().equals(goal_node.getValue())){
+    if (!(forbidden!=null && forbidden.contains(current_node.getValue()))
+      && !(expanded.size()!=0 && current_node.getParent()!=null
+      && current_node.isInList(expanded))){
+      expanded.add(current_node);
+      if (expanded.size()>=1000){
+          System.out.println("No solution found");
+          printValues(expanded);
+          return;
+      }
+      // generate children
+      current_node.createChildren();
+      for (Node child:current_node.getChirdren()){
+        child.calculateHeuristic(goal_node);
+        for (int i = 0; i< fringe.size(); i++){
+        //  System.out.println(fringe.size());
+          if (child.getHeuristic() <= fringe.get(i).getHeuristic()){
+            // insert most recent first if heuristics are the same
+            fringe.add(i,child);
+            break;
+          }
+        }
+        // add to the end of the queue or at the start if first node
+        fringe.add(child);
+      }
+    }
+    // reached the end but didn't find the node
+    if (fringe.size() == 0){
+      System.out.println("No solution found");
+      printValues(expanded);
+      return;
+    }
+    // keep going
+    current_node= fringe.get(0);
+    fringe.remove(0);
+  }
+  // found the goal node
+  expanded.add(current_node);
+
+  path.add(current_node);
+  while (current_node.getParent()!=null){
+    path.add(current_node.getParent());
+    current_node = current_node.getParent();
+
+  }
+  ArrayList<Node> path_reversed = new ArrayList<Node>();
+  for (int i = path.size()-1; i>=0; i--){
+    path_reversed.add(path.get(i));
+  }
+  printValues(path_reversed);
+  printValues(expanded);
+  return;
+}
+
+public static void A(Node start_node, Node goal_node,
+ArrayList<ArrayList<Integer>> forbidden){
+  ArrayList<Node> expanded = new ArrayList<Node>();
+  ArrayList<Node> path = new ArrayList<Node>();
+  //PriorityQueue<Node> fringe = new PriorityQueue<Node>();
+  ArrayList<Node> fringe = new ArrayList<Node>();
+  Node current_node = start_node;
+
+  while (!current_node.getValue().equals(goal_node.getValue())){
+    if (!(forbidden!=null && forbidden.contains(current_node.getValue()))
+      && !(expanded.size()!=0 && current_node.getParent()!=null
+      && current_node.isInList(expanded))){
+      expanded.add(current_node);
+      if (expanded.size()>=1000){
+          System.out.println("No solution found");
+          printValues(expanded);
+          return;
+      }
+      // generate children
+      current_node.createChildren();
+      for (Node child:current_node.getChirdren()){
+        child.calculateHeuristic(goal_node);
+        child.setHeuristic(child.getDepth());
+        for (int i = 0; i< fringe.size(); i++){
+        //  System.out.println(fringe.size());
+          if (child.getHeuristic() <= fringe.get(i).getHeuristic()){
+            // insert most recent first if heuristics are the same
+            fringe.add(i,child);
+            break;
+          }
+        }
+        // add to the end of the queue or at the start if first node
+        fringe.add(child);
+      }
+    }
+    // reached the end but didn't find the node
+    if (fringe.size() == 0){
+      System.out.println("No solution found");
+      printValues(expanded);
+      return;
+    }
+    // keep going
+    current_node= fringe.get(0);
+    fringe.remove(0);
+  }
+  // found the goal node
+  expanded.add(current_node);
+
+  path.add(current_node);
+  while (current_node.getParent()!=null){
+    path.add(current_node.getParent());
+    current_node = current_node.getParent();
+
+  }
+  ArrayList<Node> path_reversed = new ArrayList<Node>();
+  for (int i = path.size()-1; i>=0; i--){
+    path_reversed.add(path.get(i));
+  }
+  printValues(path_reversed);
+  printValues(expanded);
+  return;
+}
 
 
+public static void Hill_CLimbing(Node start_node, Node goal_node,
+ArrayList<ArrayList<Integer>> forbidden){
+  ArrayList<Node> expanded = new ArrayList<Node>();
+  ArrayList<Node> path = new ArrayList<Node>();
+//  PriorityQueue<Node> fringe = new PriorityQueue<Node>();
+  //ArrayList<Node> fringe = new ArrayList<Node>();
+  Node current_node = start_node;
+
+  while (!current_node.getValue().equals(goal_node.getValue())){
+    ArrayList<Node> fringe = new ArrayList<Node>();
+
+    if (!(forbidden!=null && forbidden.contains(current_node.getValue()))
+      && !(expanded.size()!=0 && current_node.getParent()!=null
+      && current_node.isInList(expanded))){
+      expanded.add(current_node);
+      if (expanded.size()>=1000){
+          System.out.println("No solution found");
+          printValues(expanded);
+          return;
+      }
+      // new fringe every time
+      current_node.createChildren();
+      for (Node child:current_node.getChirdren()){
+        child.calculateHeuristic(goal_node);
+        //child.setHeuristic(child.getDepth());
+        for (int i = 0; i< fringe.size(); i++){
+        //  System.out.println(fringe.size());
+          if (child.getHeuristic() <= fringe.get(i).getHeuristic()){
+            // insert most recent first if heuristics are the same
+            fringe.add(i,child);
+            break;
+          }
+        }
+        // add to the end of the queue or at the start if first node
+        fringe.add(child);
+      }
+
+    }
+    // reached the end but didn't find the node
+    if (fringe.size() == 0 || (current_node.getParent()!=null &&
+    fringe.get(0).getHeuristic()>=current_node.getHeuristic())){
+      System.out.println("No solution found");
+      printValues(expanded);
+      return;
+    }
+    // keep going
+    current_node= fringe.get(0);
+
+    //fringe.remove(0);
+  }
+  // found the goal node
+  expanded.add(current_node);
+
+  path.add(current_node);
+  while (current_node.getParent()!=null){
+    path.add(current_node.getParent());
+    current_node = current_node.getParent();
+
+  }
+  ArrayList<Node> path_reversed = new ArrayList<Node>();
+  for (int i = path.size()-1; i>=0; i--){
+    path_reversed.add(path.get(i));
+  }
+  printValues(path_reversed);
+  printValues(expanded);
+  return;
+}
 
   public static void main(String[] args) throws FileNotFoundException {
     File file = new File(args[1]);
@@ -242,8 +425,8 @@ ArrayList<ArrayList<Integer>> forbidden){
     end.add(Integer.parseInt(input.get(1).split("")[2]));
 
 
-    Node start_node = new Node(start,null,null,0, 0);
-    Node end_node = new Node(end,null,null,-4, 0);
+    Node start_node = new Node(start,null,null,0, 0, 0);
+    Node end_node = new Node(end,null,null,-4, 0, 0);
 
     ArrayList<ArrayList<Integer>> forbidden = new ArrayList<ArrayList<Integer>>();
     if (input.size()==3){
@@ -265,6 +448,12 @@ ArrayList<ArrayList<Integer>> forbidden){
       DFS(start_node,end_node,forbidden);
     }else if (args[0].compareTo("I")==0){
       IDS(start_node,end_node,forbidden);
+    }else if (args[0].compareTo("G")==0){
+      Greedy(start_node,end_node,forbidden);
+    }else if (args[0].compareTo("A")==0){
+      A(start_node,end_node,forbidden);
+    }else if (args[0].compareTo("H")==0){
+      Hill_CLimbing(start_node,end_node,forbidden);
     }
   }
 }

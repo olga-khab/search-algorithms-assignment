@@ -1,15 +1,15 @@
 import java.util.*;
 import java.lang.Math.*;
-public class Node{
+public class Node implements Comparable<Node>{
   private ArrayList<Integer> value;
   private ArrayList<Node> children;
   private Node parent;
   private int changed_parent_digit;
   private int depth;
-  private double heuristic;
+  private Integer heuristic;
 
   public Node(ArrayList<Integer> vals, ArrayList<Node> children, Node parent,
-  int digit, int depth, double heuristic){
+  int digit, int depth, Integer heuristic){
     this.value = vals;
     this.children=children;
     this.parent=parent;
@@ -37,7 +37,7 @@ public class Node{
         temp.add(2,third);
         // create child Node
         Node n = new Node(temp, null, this, -1, this.getDepth()+1,0);
-        n.calculateHeuristic(this);
+        //n.calculateHeuristic(this);
         this.children.add(n);
       }
     // + 1
@@ -52,7 +52,7 @@ public class Node{
         temp.add(2,third);
         // create child Node
         Node n = new Node(temp, null, this, 1, this.getDepth()+1,0);
-        n.calculateHeuristic(this);
+        //n.calculateHeuristic(this);
         this.children.add(n);
       }
     }
@@ -71,7 +71,7 @@ public class Node{
         temp.add(2,third);
         // create child Node
         Node n = new Node(temp, null, this, -2, this.getDepth()+1,0);
-        n.calculateHeuristic(this);
+        //n.calculateHeuristic(this);
         this.children.add(n);
       }
       // + 1
@@ -86,7 +86,7 @@ public class Node{
         temp.add(2,third);
         // create child Node
         Node n = new Node(temp, null, this, 2, this.getDepth()+1,0);
-        n.calculateHeuristic(this);
+        //n.calculateHeuristic(this);
         this.children.add(n);
       }
     }
@@ -105,7 +105,7 @@ public class Node{
         temp.add(2,third);
         // create child Node
         Node n = new Node(temp, null, this, -3, this.getDepth()+1,0);
-        n.calculateHeuristic(this);
+        //n.calculateHeuristic(this);
         this.children.add(n);
       }
       // + 1
@@ -120,7 +120,7 @@ public class Node{
         temp.add(2,third);
         // create child Node
         Node n = new Node(temp, null, this, 3, this.getDepth()+1,0);
-        n.calculateHeuristic(this);
+        //n.calculateHeuristic(this);
         this.children.add(n);
       }
     }
@@ -144,8 +144,13 @@ public class Node{
     return this.depth;
   }
 
-  public double getHeuristic(){
+  public Integer getHeuristic(){
     return this.heuristic;
+  }
+
+  @Override
+  public int compareTo(Node n) {
+     return this.getHeuristic().compareTo(n.getHeuristic());
   }
 
   public void calculateHeuristic(Node n){
@@ -155,40 +160,29 @@ public class Node{
     Math.abs(val1.get(1)-val2.get(1))+
     Math.abs(val1.get(2)-val2.get(2));
   }
-  public boolean compareTo(Node n){
+  public boolean isEqual(Node n){
     if (this.getValue().equals(n.getValue())){
       if (Math.abs(this.getParentDigit())==Math.abs(n.getParentDigit())){
         return true;
       }
     }
     return false;
-    /*  ArrayList<ArrayList<Integer>> n_children = new ArrayList<ArrayList<Integer>>();
-      n.createChildren();
-      this.createChildren();
-      for (Node child:n.getChirdren()){
-        n_children.add(child.getValue());
-      }
-      for (Node child:this.getChirdren()){
-        if (!n_children.contains(child.getValue())){
-          //at least one child is different
-          return false;
-        }
-      }
-      return true;
-    }
-    // values don't match
-    return false; */
   }
 
   public boolean isInList(ArrayList<Node> list){
     for (Node item : list){
-      if (item.compareTo(this)){
+      if (item.isEqual(this)){
         return true;
       }
     }
     // all the same
     return false;
   }
+
+  public void setHeuristic(int h){
+    this.heuristic=this.heuristic+h;
+  }
+  // compare by heuristic for priority queue
 
   public static void main(String[] args){
   /*  ArrayList<Integer> vals = new ArrayList<Integer>();
